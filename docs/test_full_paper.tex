@@ -1,0 +1,44 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage{mathptmx}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[margin={2cm, 2cm}]{geometry}
+\DeclareSymbolFont{extraup}{U}{zavm}{m}{n}
+\DeclareMathSymbol{\varheart}{\mathalpha}{extraup}{86}
+\DeclareMathSymbol{\vardiamond}{\mathalpha}{extraup}{87}
+\usepackage{nameref, hyperref}
+\usepackage{float}
+\usepackage{cite}
+\setlength{\parskip}{1em}
+\bibliographystyle{plos2015}
+
+
+\begin{document}
+
+\begin{flushleft}
+{\LARGE
+\textbf\newline{\textit{CorShrink}: A random multi-target adaptive shrinkage method for correlation matrix estimation} 
+}
+
+Kushal K Dey \\
+University of Chicago, Dept. of Statistics, \\
+5220 S Kenwood Ave, \\
+Chicago, IL, 60615 \\
+kkdey@uchicago.edu \\
+\end{flushleft}
+
+\begin{center}
+\textbf{Abstract} \\ \vspace{0.2 in}
+\end{center}
+\begin{flushleft}
+{\small Shrinkage estimation of correlation matrices provides well conditioned and more accurate estimators of the population correlation matrix, particularly in `small n, large p` contexts. In this paper, we propose a multi target shrinkage method called \textit{CorShrink} where the targets are noisy versions of identity matrix and which learns adaptively the optimal amount of shrinkage to these targets from the data. For different $(n,p)$ scenarios, we compare the performance of our method with respect to the standard approaches. We also provide a demonstration of how it can be used to understand  and interpret gene-gene correlation structure in single cell RNA-seq data. The methods are implemented in R package \textbf{CorShrink}  available from Github (\url{https://github.com/kkdey/CorShrink.})} \\ \vspace{0.2 in}
+
+\textbf{Keywords}: shrinkage, covariance matrix estimation, variational EM, single cell RNA-seq
+\end{flushleft}
+
+\normalsize
+\input{introduction.tex}
+\input{methods.tex}
+\input{results.tex}
+\end{document}
