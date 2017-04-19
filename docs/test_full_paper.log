@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  9 DEC 2016 02:51
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  21 FEB 2017 12:01
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -442,38 +442,38 @@ LaTeX Info: Redefining \nameref on input line 17.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <20.74> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 21.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 32.
-LaTeX Font Info:    Try loading font information for OT1+ztmcm on input line 35
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 26.
+LaTeX Font Info:    Try loading font information for OT1+ztmcm on input line 29
 .
 
 (/usr/local/texlive/2016/texmf-dist/tex/latex/psnfss/ot1ztmcm.fd
 File: ot1ztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OT1/ztmcm.
 )
-LaTeX Font Info:    Try loading font information for OML+ztmcm on input line 35
+LaTeX Font Info:    Try loading font information for OML+ztmcm on input line 29
 .
 
 (/usr/local/texlive/2016/texmf-dist/tex/latex/psnfss/omlztmcm.fd
 File: omlztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OML/ztmcm.
 )
-LaTeX Font Info:    Try loading font information for OMS+ztmcm on input line 35
+LaTeX Font Info:    Try loading font information for OMS+ztmcm on input line 29
 .
 
 (/usr/local/texlive/2016/texmf-dist/tex/latex/psnfss/omsztmcm.fd
 File: omsztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMS/ztmcm.
 )
-LaTeX Font Info:    Try loading font information for OMX+ztmcm on input line 35
+LaTeX Font Info:    Try loading font information for OMX+ztmcm on input line 29
 .
 
 (/usr/local/texlive/2016/texmf-dist/tex/latex/psnfss/omxztmcm.fd
 File: omxztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMX/ztmcm.
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 35.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 29.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 35.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 29.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 35.
-LaTeX Font Info:    Try loading font information for U+zavm on input line 35.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 29.
+LaTeX Font Info:    Try loading font information for U+zavm on input line 29.
 
 (/usr/local/texlive/2016/texmf-dist/tex/latex/arev/uzavm.fd
 File: uzavm.fd 2006/05/30 Fontinst v1.929 font definitions for U/zavm.
@@ -488,7 +488,7 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
  [1
 
 {/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]) (./met
-hods.tex [2]
+hods.tex
 LaTeX Font Info:    Try loading font information for OMS+ptm on input line 46.
 
 (/usr/local/texlive/2016/texmf-dist/tex/latex/psnfss/omsptm.fd
@@ -496,12 +496,12 @@ File: omsptm.fd
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <12> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 46.
- [3] [4])
-(./results.tex
+ [2] [3]
+[4]) (./results.tex
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 4.
 
-<../figures/paper_figures/figure1.pdf, id=103, 1027.84pt x 770.88pt>
+<../figures/paper_figures/figure1.pdf, id=105, 1027.84pt x 770.88pt>
 File: ../figures/paper_figures/figure1.pdf Graphic file (type pdf)
 
 <use ../figures/paper_figures/figure1.pdf>
@@ -518,31 +518,31 @@ Overfull \hbox (22.1919pt too wide) in paragraph at lines 19--20
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.25 
+l.27 
       <../figures/paper_figures/figure1.pdf>]
-<../figures/paper_figures/figure2a.png, id=150, 776.9025pt x 352.31625pt>
+<../figures/paper_figures/figure2a.png, id=155, 776.9025pt x 352.31625pt>
 File: ../figures/paper_figures/figure2a.png Graphic file (type png)
 
 <use ../figures/paper_figures/figure2a.png>
 Package pdftex.def Info: ../figures/paper_figures/figure2a.png used on input li
 ne 35.
 (pdftex.def)             Requested size: 433.62802pt x 252.94176pt.
- [7pdfTeX warning (ext4): destination with the same identifier (name{figure.2})
- has been already used, duplicate ignored
 
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.78 
-      <../figures/paper_figures/figure2a.png>]
-<../figures/paper_figures/figure3.pdf, id=170, 1027.84pt x 770.88pt>
+<../figures/paper_figures/figure3.pdf, id=162, 1027.84pt x 770.88pt>
 File: ../figures/paper_figures/figure3.pdf Graphic file (type pdf)
 
 <use ../figures/paper_figures/figure3.pdf>
 Package pdftex.def Info: ../figures/paper_figures/figure3.pdf used on input lin
 e 81.
 (pdftex.def)             Requested size: 433.61894pt x 216.80946pt.
+ [7pdfTeX warning (ext4): destination with the same identifier (name{figure.2})
+ has been already used, duplicate ignored
 
-<../figures/paper_figures/figure4.pdf, id=174, 1027.84pt x 770.88pt>
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.88 
+      <../figures/paper_figures/figure2a.png>]
+<../figures/paper_figures/figure4.pdf, id=175, 1027.84pt x 770.88pt>
 File: ../figures/paper_figures/figure4.pdf Graphic file (type pdf)
 
 <use ../figures/paper_figures/figure4.pdf>
@@ -558,33 +558,33 @@ has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.100 
+l.105 
        <../figures/paper_figures/figure3.pdf>] [9pdfTeX warning (ext4): destina
 tion with the same identifier (name{figure.4}) has been already used, duplicate
  ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.108 
+l.121 
        <../figures/paper_figures/figure4.pdf>])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 44.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 38.
  [10]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 44.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 38.
  (./test_full_paper.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 44.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 44.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 38.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 38.
 Package rerunfilecheck Info: File `test_full_paper.out' has not changed.
 (rerunfilecheck)             Checksum: 8FB6564A9E2EBBADF0214FB834B9B5C6;327.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 44.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 38.
  ) 
 Here is how much of TeX's memory you used:
  6807 strings out of 493014
  101438 string characters out of 6133351
- 210771 words of memory out of 5000000
+ 209771 words of memory out of 5000000
  10134 multiletter control sequences out of 15000+600000
  49011 words of font info for 105 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 42i,11n,32p,2134b,335s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 42i,11n,32p,2134b,440s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2016/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/te
 xlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/tex
@@ -597,7 +597,7 @@ dist/fonts/type1/urw/symbol/usyr.pfb></usr/local/texlive/2016/texmf-dist/fonts/
 type1/urw/times/utmb8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/
 times/utmr8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/times/utmr
 i8a.pfb>
-Output written on test_full_paper.pdf (10 pages, 1878382 bytes).
+Output written on test_full_paper.pdf (10 pages, 1877537 bytes).
 PDF statistics:
  329 PDF objects out of 1000 (max. 8388607)
  262 compressed objects within 3 object streams
