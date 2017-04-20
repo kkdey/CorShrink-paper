@@ -3,25 +3,25 @@
 ####################################   Example simulation Scheme  ######################################
 
 dim <- 100
-nsamples <- 10
+nsamples <- 50
 pop_cov <- generate_cov(dim);
 plot(sort(pop_cov$eigen, decreasing = TRUE), type="l")
 
-rho1 <- 0.2;
+rho1 <- 0.4;
 rho2 <- 0.7;
 block1 <- diag(rho1, dim/2) + (1-rho1)*rep(1, dim/2)%*% t(rep(1, dim/2))
 block2 <- diag(rho2, dim/2) + (1-rho2)*rep(1, dim/2)%*% t(rep(1, dim/2))
 pop_cov <- as.matrix(Matrix::bdiag(block1, block2));
 
 
-generate_sample <- mvtnorm::rmvnorm(nsamples, rep(0, dim), pop_cov);
+generate_sample <- mvtnorm::rmvnorm(nsamples, rep(0, dim), pop_cov$Sigma);
 cov_sample <- cov(generate_sample)
 eigen_sample <- eigen(cov_sample, only.values = TRUE)
 nsamples <- nsamples
 
-system.time(cov_sample_ML <-  CorShrink::CovShrink(generate_sample, nsamples, type="ML"))
+system.time(cov_sample_ML <-  CorShrink::CovShrink(generate_sample, nsamples, sd_boot = FALSE, type="ML"))
+system.time(cov_sample_ML_boot <-  CorShrink::CovShrink(generate_sample, nsamples, sd_boot = TRUE, type="ML"))
 system.time(cov_sample_VEM <-  CorShrink::CovShrink(generate_sample, nsamples, type="VEM"))
-system.time(cov_sample_VEM2 <-  CorShrink::CovShrink(generate_sample, nsamples, type="VEM2"))
 system.time(strimmer_sample <- corpcor::cov.shrink(generate_sample))
 system.time(glasso_sample_005 <- glasso::glasso(cov_sample, rho = 0.05))
 system.time(glasso_sample_05 <- glasso::glasso(cov_sample, rho = 0.5))
@@ -31,24 +31,23 @@ system.time(glasso_sample_10 <- glasso::glasso(cov_sample, rho = 10))
 
 
 eigen_sample_ML <- eigen(cov_sample_ML, only.values = TRUE)
+eigen_sample_ML_boot <- eigen(cov_sample_ML_boot, only.values = TRUE)
 eigen_sample_VEM <- eigen(cov_sample_VEM, only.values = TRUE)
-eigen_sample_VEM2 <- eigen(cov_sample_VEM2, only.values = TRUE)
 eigen_strimmer <- eigen(strimmer_sample, only.values = TRUE)
 eigen_glasso_005 <- eigen(glasso_sample_005$w, only.values = TRUE)
 eigen_glasso_05 <- eigen(glasso_sample_05$w, only.values = TRUE)
 eigen_glasso_1 <- eigen(glasso_sample_1$w, only.values = TRUE)
 eigen_glasso_10 <- eigen(glasso_sample_10$w, only.values = TRUE)
 eigen_sample <- eigen(cov_sample, only.values = TRUE)
-pop_eigen <- eigen(pop_cov, only.values = TRUE)
+pop_eigen <- eigen(pop_cov$Sigma, only.values = TRUE)
 
 library(ggplot2)
 
 eigendata <- data.frame(
   eigen_order = 1:dim,
   covshrink.ML = sort(log(as.numeric(eigen_sample_ML$values)+1),  decreasing=TRUE),
+  covshrink.ML.boot = sort(log(as.numeric(eigen_sample_ML_boot$values)+1),  decreasing=TRUE),
   covshrink.VEM = sort(log(as.numeric(eigen_sample_VEM$values)+1),  decreasing=TRUE),
-  covshrink.VEM2 = sort(log(as.numeric(eigen_sample_VEM2$values)+1),
-                 decreasing = TRUE),
   covshrink.strimmer = sort(log(as.numeric(eigen_strimmer$values)+1),  decreasing=TRUE),
   glasso.cov.005 = sort(log(as.numeric(eigen_glasso_005$values)+1),  decreasing=TRUE),
   glasso.cov.05 = sort(log(as.numeric(eigen_glasso_05$values)+1),  decreasing=TRUE),
@@ -60,8 +59,8 @@ eigendata <- data.frame(
 
 colnames(eigendata) <- c("eigenorder",
                          "covshrinkML",
+                         "covshrinkML.boot",
                          "covshrinkVEM",
-                         "covshrinkVEM2",
                          "cov.strimmer",
                          "cov.glasso.005",
                          "cov.glasso.05",
@@ -72,9 +71,10 @@ colnames(eigendata) <- c("eigenorder",
 
 library(ggplot2)
 ggplot(eigendata, aes(eigenorder)) +
-  geom_line(aes(y = covshrinkML, colour = "covshrinkML")) +
+  geom_line(aes(y = jitter(covshrinkML, factor = 2), colour = "covshrinkML")) +
+  geom_line(aes(y = covshrinkML.boot, colour = "covshrinkML.boot")) +
   geom_line(aes(y = covshrinkVEM, colour = "covshrinkVEM")) +
-  geom_line(aes(y = covshrinkVEM2, colour = "covshrinkVEM2"))+
+  #geom_line(aes(y = covshrinkVEM2, colour = "covshrinkVEM2"))+
   geom_line(aes(y = cov.strimmer, colour = "cov.strimmer"))+
   geom_line(aes(y = cov.glasso.005, colour = "cov.glasso.rho.0.05"))+
   geom_line(aes(y = cov.glasso.05, colour = "cov.glasso.rho.0.5"))+
@@ -84,12 +84,13 @@ ggplot(eigendata, aes(eigenorder)) +
   geom_line(aes(y = pop.cov, colour = "pop.cov"))+
   xlab("Order of eigenvalues (sorted)")+
   ylab("log(Eigenvalues + 1)")+
-  scale_colour_manual(values=c("blue", "violet", "purple", "magenta", "pink", "orange", "red", "green", "black", "grey"))+
+  scale_colour_manual(values=c("blue", "orange", "magenta", "brown", "violet", "purple", "red", "green", "black", "grey"))+
   ggtitle(paste0("n/p=", round(nsamples/dim, 4),""))+
   theme(plot.title = element_text(lineheight=.8, face="bold"))
 
 
 eigenval_sample_ML <- eigen(cov_sample_ML)$values
+eigenval_sample_ML_boot <- eigen(cov_sample_ML_boot)$values
 eigenval_sample_VEM <- eigen(cov_sample_VEM)$values
 eigenval_sample_VEM2 <- eigen(cov_sample_VEM2)$values
 eigenval_strimmer <- eigen(strimmer_sample)$values
@@ -100,8 +101,8 @@ eigenval_sample <- eigen(cov_sample)$values
 popval <- eigen(pop_cov)$values
 
 eigenvec_sample_ML <- eigen(cov_sample_ML)$vectors[,order(eigenval_sample_ML, decreasing=TRUE)]
+eigenvec_sample_ML_boot <- eigen(cov_sample_ML_boot)$vectors[,order(eigenval_sample_ML_boot, decreasing=TRUE)]
 eigenvec_sample_VEM <- eigen(cov_sample_VEM)$vectors[,order(eigenval_sample_VEM, decreasing=TRUE)]
-eigenvec_sample_VEM2 <- eigen(cov_sample_VEM2)$vectors[,order(eigenval_sample_VEM2, decreasing=TRUE)]
 eigenvec_strimmer <- eigen(strimmer_sample)$vectors[,order(eigenval_strimmer, decreasing=TRUE)]
 eigenvec_glasso_005 <- eigen(glasso_sample_005$w)$vectors[,order(eigenval_glasso_005, decreasing=TRUE)]
 eigenvec_glasso_05 <- eigen(glasso_sample_05$w)$vectors[,order(eigenval_glasso_05, decreasing=TRUE)]
@@ -110,6 +111,7 @@ eigenvec_sample <- eigen(cov_sample)$vectors[,order(eigenval_sample, decreasing=
 popvec <- eigen(pop_cov)$vectors[,order(popval, decreasing=TRUE)]
 
 sum(abs(popvec[,1:5] - eigenvec_sample_ML[,1:5]))/(5*dim)
+sum(abs(popvec[,1:5] - eigenvec_sample_ML_boot[,1:5]))/(5*dim)
 sum(abs(popvec[,1:5] - eigenvec_glasso_005[,1:5]))/(5*dim)
 sum(abs(popvec[,1:5] - eigenvec_glasso_05[,1:5]))/(5*dim)
 sum(abs(popvec[,1:5] - eigenvec_glasso_1[,1:5]))/(5*dim)
@@ -122,19 +124,23 @@ sum(abs(popvec[,1:5] - eigenvec_sample_VEM2[,1:5]))/(5*dim)
 
 library(fields)
 set.seed(1)
-par(mfrow=c(5,2))
-cols = rainbow(100)
+par(mfrow=c(4,2))
+par(mar=c(1,1,1,1))
 
-image.plot(cov2cor(pop_cov), col=cols, nlevel=100, main="pop.cov", cex.main=1)
-image.plot(cov2cor(as.matrix(cov_sample)), breaks = 0:100/100, col=cols, nlevel=100, main="sample.cov", cex.main=1)
-image.plot(cov2cor(as.matrix(cov_sample_ML)), breaks = 0:100/100, col=cols, nlevel=100, main="corshrink.ML", cex.main=1)
-image.plot(cov2cor(as.matrix(cov_sample_VEM)), breaks = 0:100/100, col=cols, nlevel=100, main="corshrink.VEM", cex.main=1)
-image.plot(cov2cor(as.matrix(cov_sample_VEM2)), breaks = 0:100/100, col=cols, nlevel=100, main="corshrink.VEM2", cex.main=1)
-image.plot(cov2cor(as.matrix(strimmer_sample)),breaks = 0:100/100, col=cols, nlevel=100, main="strimmer.cov", cex.main=1)
-image.plot(cov2cor(as.matrix(glasso_sample_005$w)), breaks = 0:100/100, col=cols, nlevel=100, main="glasso.cov.rho=0.05", cex.main=1)
-image.plot(cov2cor(as.matrix(glasso_sample_05$w)), breaks = 0:100/100, col=cols, nlevel=100, main="glasso.cov.rho=0.5", cex.main=1)
-image.plot(cov2cor(as.matrix(glasso_sample_1$w)), breaks = 0:100/100, col=cols, nlevel=100, main="glasso.cov.rho=1", cex.main=1)
-image.plot(cov2cor(as.matrix(glasso_sample_10$w)), breaks = 0:100/100,  col=cols, nlevel=100, main="glasso.cov.rho=10", cex.main=1)
+num <- 100
+cols = colorRampPalette(c("white", "blue", "red"))(100)
+
+image.plot(cov2cor(pop_cov), col=cols, nlevel=num, main="pop.cov", cex.main=1)
+image.plot(cov2cor(as.matrix(cov_sample)), breaks = 0:num/num, col=cols, nlevel=num, main="sample.cov", cex.main=1)
+image.plot(cov2cor(as.matrix(cov_sample_ML)), breaks = 0:num/num, col=cols, nlevel=num, main="corshrink.ML", cex.main=1)
+image.plot(cov2cor(as.matrix(cov_sample_ML_boot)), breaks = 0:num/num, col=cols, nlevel=num, main="corshrink.ML.boot", cex.main=1)
+image.plot(cov2cor(as.matrix(cov_sample_VEM)), breaks = 0:num/num, col=cols, nlevel=num, main="corshrink.VEM", cex.main=1)
+#image.plot(cov2cor(as.matrix(cov_sample_VEM2)), breaks = 0:num/num, col=cols, nlevel=num, main="corshrink.VEM2", cex.main=1)
+image.plot(cov2cor(as.matrix(strimmer_sample)),breaks = 0:num/num, col=cols, nlevel=num, main="strimmer.cov", cex.main=1)
+image.plot(cov2cor(as.matrix(glasso_sample_005$w)), breaks = 0:num/num, col=cols, nlevel=num, main="glasso.cov.rho=0.05", cex.main=1)
+image.plot(cov2cor(as.matrix(glasso_sample_05$w)), breaks = 0:num/num, col=cols, nlevel=num, main="glasso.cov.rho=0.5", cex.main=1)
+#image.plot(cov2cor(as.matrix(glasso_sample_1$w)), breaks = 0:num/num, col=cols, nlevel=num, main="glasso.cov.rho=1", cex.main=1)
+#image.plot(cov2cor(as.matrix(glasso_sample_10$w)), breaks = 0:num/num,  col=cols, nlevel=num, main="glasso.cov.rho=10", cex.main=1)
 
 
 install.packages("cape")
