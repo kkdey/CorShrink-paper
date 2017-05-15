@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Learning D3</title>
+    <link rel="stylesheet" href="main.css">
+    <script  type="text/javascript" src="d3.min.js"></script>
+    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+</head>
+
+<style>
+
+.body {
+  font: 11px sans-serif;
+}
+
+.dot {
+  stroke: #000;
+}
+
+
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+
+</style>
+
+<body>
+<div class="dot"></div>
+<div id='heatmap'></div>
+<script>
+
+d3.select("body").style("background-color", "white");
+
+var gridSize = 12,
+h = gridSize,
+w = gridSize,
+rectPadding = 1;
+
+var tip = d3.tip()
+  .attr('class', 'd3-tip')
+  .offset([-10, 0])
+  .html(function(d) {
+    return "<strong> Name:</strong> <span style='color:white'>" + d.name +  "</span>" + "<br/>" + "<strong> X:</strong> <span style='color:white'>" + d3.format("0.3f")(d.cx) +  "</span>" + "<br/>" + "<strong> Y:</strong> <span style='color:white'>" + d3.format("0.3f")(d.cy) +  "</span>" ;
+  });
+
+var colorLow = 'green', colorMed = 'white', colorHigh = 'red';
+
+var margin = {top: 300, right: 100, bottom: 50, left: 200},
+    width = 1200 - margin.left - margin.right,
+    height = 1000 - margin.top - margin.bottom;
+
+var colorScale = d3.scale.linear()
+     .domain([-1, 0, 1])
+     .range([colorLow, colorMed, colorHigh]);
+
+ function highlightpoint(d) {
+                d3.select(this).style("fill", "red");
+            }
+
+function dehighlightpoint(d) {
+                d3.select(this).style("fill", "black");
+            }
+
+
+/*var xValue = function(d) { return d[0].set.x;}, // data -> value
+    xScale = d3.scale.linear().range([0, width]), // value -> display
+    xMap = function(d) { return xScale(xValue(d));}, // data -> display
+    xAxis = d3.svg.axis().scale(xScale).orient("bottom");
+
+var yValue = function(d) { return d[0].set.y;}, // data -> value
+    yScale = d3.scale.linear().range([0, height]), // value -> display
+    yMap = function(d) { return yScale(yValue(d));}, // data -> display
+    yAxis = d3.svg.axis().scale(yScale).orient("left");
+
+*/
+
+
+d3.csv("gene1_corr.csv", function(data) {
+  
+            console.log(data[0]);
+
+            var arrX = [];
+            for(var i = 1; i <= 10; i++){
+                arrX.push("X-" + i)
+            }
+
+            var arrY = [];
+            for(var i = 1; i <= 10; i++){
+                arrY.push("Y-" + i)
+            }
+
+           // console.log(arrX);
+           // console.log(arrY);
+
+           // console.log(data[0][arrX[2]]);
+
+            var dataset = [];
+
+            for (var i=0; i < data.length; i++) {
+                dataset[i] = {
+                        x : [],
+                        y: []
+                };
+
+                for(var j = 0; j < 10; j++){
+                        dataset[i].x.push(+data[i][arrX[j]]);
+                        dataset[i].y.push(+data[i][arrY[j]]);
+                }
+
+                data[i].set = dataset[i];
+
+            }
+
+           // console.log(data[0]);
+           // console.log(data.length);
+           // console.log(data[0].set);
+
+            var xScale = d3.scale.linear().range([0, width]);
+            var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
+
+            var yScale = d3.scale.linear().range([0, height]);
+            var yAxis = d3.svg.axis().scale(yScale).orient("left");
+
+
+            xScale.domain([d3.min(data[0].set.x) - 0.5, d3.max(data[0].set.x) + 0.5]);
+            yScale.domain([d3.max(data[0].set.y) + 0.5, d3.min(data[0].set.y) - 0.5]);
+
+
+            var svg = d3.select(".dot").append("svg")
+                 .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                 .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            svg.call(tip);
+
+            temp_tab = new Array();
+            for(var j = 0; j < 10; j++){
+                var obj = {cx : dataset[0].x[j],
+                           cy : dataset[0].y[j],
+                          name: arrX[j]};
+                temp_tab.push(obj);
+            }
+
+           // console.log(temp_tab);
+           // console.log(temp_tab.length);
+           // console.log(xScale(0.4));
+           // console.log(yScale(-0.2));
+
+            console.log(tip.show);
+            console.log(tip.hide);
+           
+            svg.selectAll("body")
+                 .data(temp_tab)
+                 .enter().append("circle")
+                 .attr("class", "dot")
+                 .attr("r", 10.5)
+                 .attr("cx", function(d) {//console.log(d.cx); 
+                                          return xScale(d.cx); })
+                 .attr("cy", function(d) {return yScale(d.cy); })
+                 .style("fill", "black")
+                 .on("mouseover", function(d) {
+                                        tip.show.call(this, d);
+                                        highlightpoint.call(this, d);
+                                    })
+                 .on("mouseout", function(d) { 
+                                        tip.hide.call(this, d);
+                                        dehighlightpoint.call(this, d);
+                                    });
+
+
+            svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis);
+
+            // Add the Y Axis
+            svg.append("g")
+                .attr("class", "y axis")
+                .call(yAxis);
+
+
+
+
+
+            var svg = d3.select("#heatmap").append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+              .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            var tooltip = d3.select("body").append("div")
+                .attr("class", "tooltip")
+                .style("opacity", 0);
+
+
+
+
+            var heatMap = svg.selectAll(".heatmap")
+                .data(data, function(d) { return d.col + ':' + d.row; })
+              .enter().append("svg:rect")
+                .attr("x", function(d) { return d.row * w; })
+                .attr("y", function(d) { return d.col * h; })
+                .attr("width", function(d) { return w; })
+                .attr("height", function(d) { return h; })
+                .style("fill", function(d) { return colorScale(d.value); })
+                .on("mouseover", function(d, i){ 
+                        d3.select(this)
+                            .style("fill", "yellow");
+                            })
+                .on("mousemove", function(d, i){ 
+                        d3.select(this)
+                            .style("fill", "yellow");
+                            })
+                .on("mouseout", function(d, i){ 
+                        d3.select(this)
+                            .style("fill", function(d) { return colorScale(d.value); });
+                            })
+                .on("click", function(d, i){ 
+                      
+                            svg.append("svg:text")
+                            .text(function(d) { console.log(d.value); return d.value; })
+                            .attr("x", function(d) { return (d.row * w + 0.5*w); })
+                            .attr("y", function(d) { return (d.col * h + 0.5*h); })
+                            .attr("text-anchor", "middle")
+                            .style("font-size", "30px");
+
+                            return console.log(d.value);})
+                .on("dblclick", function(d, i){ 
+                        d3.select(this)
+                            .style("fill", function(d) { return colorScale(d.value); });
+                            return console.log(d.value);})
+
+            svg.selectAll(".heatmap")
+                .data(data)
+                .enter().append("svg:text")
+                .text(function(d) { return d.value; })
+                .attr("x", function(d) { return (d.row * w + 0.5*w); })
+                .attr("y", function(d) { return (d.col * h + 0.5*h); })
+                .attr("text-anchor", "middle")
+                .style("font-size", "5px");
+
+             svg.selectAll(".heatmap")
+                .data(data)
+                .enter().append("svg:text")
+                .text(function(d) { return d.tissue2; })
+                .attr("y", function(d) { return (d.col * h + 0.6*h); })
+                .attr("x",  -30)
+                .attr("text-anchor", "end")
+                .style("fill", "black")
+                .style("font-family", "Times New Roman")
+                .style("font-size", "10px");  
+
+
+            svg.selectAll(".heatmap")
+                .data(data)
+                .enter().append("svg:text")
+                .text(function(d) { return d.tissue2; })
+                .attr("x", function(d) { return (d.row * w + w); })
+                .attr("y",  0)
+                .attr("text-anchor", "start")
+                .attr("transform", function(d) { return ("translate(" + (d.col *h + 0.5*w) + "," + (d.row*h + 0.5*w) + ")rotate(270)") })
+                .style("fill", "black")
+                .style("font-family", "Times New Roman")
+                .style("font-size", "10px");
+
+});
+
+</script>
+</body>
+</html>
