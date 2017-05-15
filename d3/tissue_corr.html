@@ -100,7 +100,7 @@ d3.csv("gene1_corr.csv", function(data) {
 
            // console.log(data[0][arrX[2]]);
 
-            var dataset = [];
+           var dataset = [];
 
             for (var i=0; i < data.length; i++) {
                 dataset[i] = {
@@ -115,7 +115,7 @@ d3.csv("gene1_corr.csv", function(data) {
 
                 data[i].set = dataset[i];
 
-            }
+            } 
 
            // console.log(data[0]);
            // console.log(data.length);
@@ -142,8 +142,8 @@ d3.csv("gene1_corr.csv", function(data) {
 
             temp_tab = new Array();
             for(var j = 0; j < 10; j++){
-                var obj = {cx : dataset[0].x[j],
-                           cy : dataset[0].y[j],
+                var obj = {cx : data[0].set.x[j],
+                           cy : data[0].set.y[j],
                           name: arrX[j]};
                 temp_tab.push(obj);
             }
@@ -223,15 +223,82 @@ d3.csv("gene1_corr.csv", function(data) {
                             .style("fill", function(d) { return colorScale(d.value); });
                             })
                 .on("click", function(d, i){ 
-                      
-                            svg.append("svg:text")
-                            .text(function(d) { console.log(d.value); return d.value; })
-                            .attr("x", function(d) { return (d.row * w + 0.5*w); })
-                            .attr("y", function(d) { return (d.col * h + 0.5*h); })
-                            .attr("text-anchor", "middle")
-                            .style("font-size", "30px");
 
-                            return console.log(d.value);})
+                    var tempset = [];
+
+                    tempset = {
+                        x : [],
+                        y: []
+                    };
+
+                    for(var j = 0; j < 10; j++){
+                                tempset.x.push(+data[i][arrX[j]]);
+                                tempset.y.push(+data[i][arrY[j]]);
+                    }
+
+                    d.set = tempset;
+
+                    var xScale = d3.scale.linear().range([0, width]);
+                    var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
+
+                    var yScale = d3.scale.linear().range([0, height]);
+                    var yAxis = d3.svg.axis().scale(yScale).orient("left");
+
+
+                    xScale.domain([d3.min(d.set.x) - 0.5, d3.max(d.set.x) + 0.5]);
+                    yScale.domain([d3.max(d.set.y) + 0.5, d3.min(d.set.y) - 0.5]);
+
+                    var svg = d3.select(".dot").append("svg")
+                                    .attr("width", width + margin.left + margin.right)
+                                    .attr("height", height + margin.top + margin.bottom)
+                                    .append("g")
+                                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+                    svg.call(tip);
+
+                    temp_tab = new Array();
+
+                    for(var j = 0; j < 10; j++){
+                        var obj = {cx : d.set.x[j],
+                                   cy : d.set.y[j],
+                                  name: arrX[j]};
+                        temp_tab.push(obj);
+                    }
+
+                    console.log(tip.show);
+                    console.log(tip.hide);
+                   
+                    svg.selectAll("body")
+                         .data(temp_tab)
+                         .enter().append("circle")
+                         .attr("class", "dot")
+                         .attr("r", 10.5)
+                         .attr("cx", function(d) {//console.log(d.cx); 
+                                                  return xScale(d.cx); })
+                         .attr("cy", function(d) {return yScale(d.cy); })
+                         .style("fill", "black")
+                         .on("mouseover", function(d) {
+                                                tip.show.call(this, d);
+                                                highlightpoint.call(this, d);
+                                            })
+                         .on("mouseout", function(d) { 
+                                                tip.hide.call(this, d);
+                                                dehighlightpoint.call(this, d);
+                                            });
+
+
+                    svg.append("g")
+                        .attr("class", "x axis")
+                        .attr("transform", "translate(0," + height + ")")
+                        .call(xAxis);
+
+                    // Add the Y Axis
+                    svg.append("g")
+                        .attr("class", "y axis")
+                        .call(yAxis);
+
+                    return console.log(d.value);})
+
                 .on("dblclick", function(d, i){ 
                         d3.select(this)
                             .style("fill", function(d) { return colorScale(d.value); });
